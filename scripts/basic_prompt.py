@@ -4,6 +4,7 @@ import argparse
 from pangram_breaker.config import load_config
 from pangram_breaker.detector import detect, print_result
 from pangram_breaker.llm import chat
+from pangram_breaker.runlog import RunLog
 
 DEFAULT_PROMPT = "Write a short essay (200-300 words) about the impact of renewable energy on modern economies."
 
@@ -17,6 +18,7 @@ def main() -> None:
     args = parser.parse_args()
 
     cfg = load_config(args.config)
+    log = RunLog("basic_prompt")
 
     llms = cfg.llms
     if args.llm:
@@ -32,12 +34,16 @@ def main() -> None:
 
         print(f"Prompt: {args.prompt[:80]}...")
         response = chat(llm, args.prompt, system=args.system)
+        gen_step = log.log_llm_generation(llm, args.prompt, response, system=args.system)
         print(f"\n--- Generated text ({len(response)} chars) ---")
         print(response)
 
         print(f"\n--- Pangram detection ---")
         result = detect(cfg.pangram_api_key, response)
+        log.log_detection(result, source=f"Step {gen_step} output ({llm.name}/{llm.model})")
         print_result(result)
+
+    log.save()
 
 
 if __name__ == "__main__":

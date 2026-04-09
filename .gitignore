@@ -11,3 +11,6 @@ wheels/
 
 # Config with secrets
 config.toml
+
+# Experiment logs
+logs/
