@@ -1,0 +1,19 @@
+[pangram]
+api_key = "your-pangram-api-key"
+
+# At least one LLM must be configured.
+# Each entry needs a name, base_url, api_key, and model.
+# The base_url should be an OpenAI-compatible chat completions endpoint base
+# (e.g. "https://api.openai.com/v1" or "https://api.anthropic.com/v1").
+
+[[llm]]
+name = "openai"
+base_url = "https://api.openai.com/v1"
+api_key = "sk-..."
+model = "gpt-4o"
+
+# [[llm]]
+# name = "anthropic"
+# base_url = "https://api.anthropic.com/v1"
+# api_key = "sk-ant-..."
+# model = "claude-sonnet-4-20250514"
